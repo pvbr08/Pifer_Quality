@@ -18,48 +18,6 @@ USE `pifer_quality`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `auditoria`
---
-
-DROP TABLE IF EXISTS `auditoria`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `auditoria` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `FK_USUARIOS` int(11) NOT NULL,
-  `ACAO` longtext NOT NULL,
-  `DT_ACAO` datetime NOT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `FK_USUARIOS` (`FK_USUARIOS`),
-  CONSTRAINT `auditoria_ibfk_1` FOREIGN KEY (`FK_USUARIOS`) REFERENCES `usuarios` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `auditoria`
---
-
-LOCK TABLES `auditoria` WRITE;
-/*!40000 ALTER TABLE `auditoria` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auditoria` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER TRG_DT_CADASTRO_AUDITORIA BEFORE INSERT ON AUDITORIA FOR EACH ROW SET NEW.DT_ACAO = NOW() */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
 -- Table structure for table `avaliacao`
 --
 
@@ -68,13 +26,14 @@ DROP TABLE IF EXISTS `avaliacao`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `avaliacao` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `DESCRICAO` varchar(255) NOT NULL,
   `NOTA` int(1) NOT NULL,
+  `DESCRICAO` varchar(255) NOT NULL,
   `OBS` longtext,
+  `ATIVO` tinyint(1) NOT NULL,
   `DT_CADASTRO` datetime NOT NULL,
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `ID` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `DESCRICAO` (`DESCRICAO`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -83,7 +42,7 @@ CREATE TABLE `avaliacao` (
 
 LOCK TABLES `avaliacao` WRITE;
 /*!40000 ALTER TABLE `avaliacao` DISABLE KEYS */;
-INSERT INTO `avaliacao` VALUES (1,'Ótimo',5,NULL,'2017-07-24 12:50:04'),(2,'Bom',4,NULL,'2017-07-24 12:50:04'),(3,'Regular',3,NULL,'2017-07-24 12:50:04'),(4,'Ruim',2,NULL,'2017-07-24 12:50:04'),(5,'Insuficiente',1,NULL,'2017-07-24 12:50:04'),(6,'Não se aplica',0,NULL,'2017-07-24 12:50:05');
+INSERT INTO `avaliacao` VALUES (1,0,'Não se aplica',NULL,1,'2017-08-10 10:31:51'),(2,1,'Péssimo',NULL,1,'2017-08-10 10:31:52'),(3,2,'Ruim',NULL,1,'2017-08-10 10:31:52'),(4,3,'Regular',NULL,1,'2017-08-10 10:31:52'),(5,4,'Bom',NULL,1,'2017-08-10 10:31:52'),(6,5,'Ótimo',NULL,1,'2017-08-10 10:31:52'),(7,6,'Perfeito',NULL,1,'2017-08-10 10:31:52');
 /*!40000 ALTER TABLE `avaliacao` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -95,7 +54,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER TRG_DT_CADASTRO_AVALIACAO BEFORE INSERT ON AVALIACAO FOR EACH ROW SET NEW.DT_CADASTRO = NOw() */;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER TRG_DT_CADASTRO_AVALIACAO BEFORE INSERT ON AVALIACAO FOR EACH ROW SET NEW.DT_CADASTRO = NOW() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -116,9 +75,7 @@ CREATE TABLE `avaliacao_pergunta` (
   `DT_CADASTRO` datetime NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `FK_PERGUNTA` (`FK_PERGUNTA`),
-  KEY `FK_AVALIACAO` (`FK_AVALIACAO`),
-  CONSTRAINT `avaliacao_pergunta_ibfk_1` FOREIGN KEY (`FK_PERGUNTA`) REFERENCES `pergunta` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `avaliacao_pergunta_ibfk_2` FOREIGN KEY (`FK_AVALIACAO`) REFERENCES `avaliacao` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `avaliacao_pergunta_ibfk_1` FOREIGN KEY (`FK_PERGUNTA`) REFERENCES `pergunta` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -139,7 +96,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER TRG_DT_CADASTRO_AVALIACAO_PERGUNTA BEFORE INSERT ON AVALIACAO_PERGUNTA FOR EACH ROW SET NEW.DT_CADASTRO = NOW() */;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER TRG_DT_CADASTRO_AVALIACA_PERGUNTA BEFORE INSERT ON AVALIACAO_PERGUNTA FOR EACH ROW SET NEW.DT_CADASTRO = NOW() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -158,11 +115,12 @@ CREATE TABLE `pergunta` (
   `FK_PERMISSAO` int(11) NOT NULL,
   `DESCRICAO` varchar(255) NOT NULL,
   `OBS` longtext,
+  `ATIVO` tinyint(1) NOT NULL,
   `DT_CADASTRO` datetime NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `DESCRICAO` (`DESCRICAO`),
   KEY `FK_PERMISSAO` (`FK_PERMISSAO`),
-  CONSTRAINT `FK_PERMISSAO` FOREIGN KEY (`FK_PERMISSAO`) REFERENCES `permissao` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `pergunta_ibfk_1` FOREIGN KEY (`FK_PERMISSAO`) REFERENCES `permissao` (`ID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -200,6 +158,7 @@ DROP TABLE IF EXISTS `permissao`;
 CREATE TABLE `permissao` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `DESCRICAO` varchar(255) NOT NULL,
+  `ATIVO` tinyint(1) NOT NULL,
   `DT_CADASTRO` datetime NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `DESCRICAO` (`DESCRICAO`)
@@ -212,7 +171,7 @@ CREATE TABLE `permissao` (
 
 LOCK TABLES `permissao` WRITE;
 /*!40000 ALTER TABLE `permissao` DISABLE KEYS */;
-INSERT INTO `permissao` VALUES (1,'ADMINISTRADOR','2017-07-24 12:43:35'),(2,'CLIENTE','2017-07-24 12:48:20'),(3,'FORNECEDOR','2017-07-24 12:48:20'),(4,'FUNCIONÁRIO','2017-07-24 12:48:20'),(5,'PÚBLICO','2017-07-24 12:48:20');
+INSERT INTO `permissao` VALUES (1,'Administrador',1,'2017-08-10 10:27:28'),(2,'Cliente',1,'2017-08-10 10:27:28'),(3,'Fornecedor',1,'2017-08-10 10:27:28'),(4,'Funcionário',1,'2017-08-10 10:27:28'),(5,'Público',1,'2017-08-10 10:27:28');
 /*!40000 ALTER TABLE `permissao` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -241,10 +200,11 @@ DROP TABLE IF EXISTS `pessoas`;
 CREATE TABLE `pessoas` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `NOME` varchar(255) NOT NULL,
-  `CNPJ_CPF` varchar(18) NOT NULL,
+  `CNPJ_CPF` varchar(20) NOT NULL,
   `ATIVO` tinyint(1) NOT NULL,
   `DT_CADASTRO` datetime NOT NULL,
   PRIMARY KEY (`ID`),
+  UNIQUE KEY `NOME` (`NOME`),
   UNIQUE KEY `CNPJ_CPF` (`CNPJ_CPF`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -255,7 +215,7 @@ CREATE TABLE `pessoas` (
 
 LOCK TABLES `pessoas` WRITE;
 /*!40000 ALTER TABLE `pessoas` DISABLE KEYS */;
-INSERT INTO `pessoas` VALUES (1,'PAULO VITOR BARBOSA RAMOS','125.099.807-77',1,'2017-07-24 12:42:02');
+INSERT INTO `pessoas` VALUES (1,'Administrador','04.658.766/0001-19',1,'2017-08-10 10:21:13');
 /*!40000 ALTER TABLE `pessoas` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -284,13 +244,15 @@ DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE `usuarios` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `FK_PESSOAS` int(11) NOT NULL,
-  `LOGIN` varchar(25) NOT NULL,
-  `PASS` varchar(255) NOT NULL,
+  `LOGIN` varchar(50) NOT NULL,
+  `PASS` varchar(50) NOT NULL,
+  `ATIVO` tinyint(1) NOT NULL,
   `DT_CADASTRO` datetime NOT NULL,
+  `DT_LAST_ACCESS` datetime NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `LOGIN` (`LOGIN`),
   KEY `FK_PESSOAS` (`FK_PESSOAS`),
-  CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`FK_PESSOAS`) REFERENCES `pessoas` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`FK_PESSOAS`) REFERENCES `pessoas` (`ID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -300,7 +262,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,1,'ADMIN','066ceb14b8ab9bf1c8fdade3155494f3','2017-07-24 12:43:02');
+INSERT INTO `usuarios` VALUES (1,1,'root','e10adc3949ba59abbe56e057f20f883e',1,'2017-08-10 10:24:38','2017-08-10 10:24:38');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -336,4 +298,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-07-24 12:51:06
+-- Dump completed on 2017-08-10 10:33:12
