@@ -25,18 +25,23 @@ function edit($colunas,  $table = null) {
     if (isset($_GET['id'])) {
         $id = $_GET['id'];
         if (isset($_POST['usuarios'])) {
-            if($customer['pass'] = $customer['pass_confirm']){
                 $customer = $_POST['usuarios'];
                 $customer['modified'] = $now->format("Y-m-d H:i:s");
-                update('usuarios', $id, $customer);
-                header('location: index.php');
-            }
+                if ($_POST['pass_nova'] == $_POST['confirm_pass_nova']){
+                    update('usuarios', $id, $customer);
+                    header('location: index.php');
+                }
+                else{
+                    echo "Usuário não confirmado";
+                }
         } else {
             global $customer;
             $customer = find($colunas, $table, '', ' WHERE ID = '.$id);
         } 
     } else {
+        
         header('location: index.php');
+        
     }
 }
 function update($table = null, $id = 0, $data = null) {
