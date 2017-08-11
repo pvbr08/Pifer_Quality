@@ -66,10 +66,44 @@
                                             </a>
                                         </div>
                                     </div>
+
+                                    <div class="col-md-3 col-sm-4">
+                                        <div class="wrimagecard wrimagecard-topimage">
+                                            <a href="<?php echo BASEURL; ?>people">
+                                                <div class="wrimagecard-topimage_header" style="background-color:rgba(187, 120, 36, 0.1) ">
+                                                    <center><i class="fa fa-area-chart" style="color:#BB7824"></i></center>
+                                                </div>
+                                                <div class="wrimagecard-topimage_title">
+                                                    <h4>Usuários
+                                                        <div class="pull-right badge">18</div>
+                                                    </h4>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="messages"></div>
+                        <div class="tab-pane fade" id="messages">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-3 col-sm-4">
+                                        <div class="wrimagecard wrimagecard-topimage">
+                                            <a href="<?php echo BASEURL; ?>permission">
+                                                <div class="wrimagecard-topimage_header" style="background-color:rgba(187, 120, 36, 0.1) ">
+                                                    <center><i class="fa fa-area-chart" style="color:#BB7824"></i></center>
+                                                </div>
+                                                <div class="wrimagecard-topimage_title">
+                                                    <h4>Permissões
+                                                        <div class="pull-right badge">18</div>
+                                                    </h4>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="tab-pane fade" id="settings"></div>
                         <div class="tab-pane fade" id="doner">
                             <div class="text-center">

@@ -8,8 +8,8 @@ $customer = null;
  *  Listagem de Clientes
  */
 function index($colunas, $table, $complemento, $where = null) {
-    global $customers;
-    $customers = find_all($colunas, $table, $complemento,  $where);
+    global $permission;
+    $permission = find_all($colunas, $table, $complemento,  $where);
 }
 function add($table = null, $colunas = null) {
     if (!empty($_POST['customer'])) {
@@ -59,9 +59,14 @@ function update($table = null, $id = 0, $data = null) {
     close_database($database);
 }
 function view($colunas, $table, $complemento = null,  $where) {
-    global $customer;
-    $customer = find($colunas, $table, $complemento,  $where);
+    global $permission;
+    $permission = find($colunas, $table, $complemento,  $where);
 }
+function findAuxiliar($colunas, $table, $complemento = null,  $where) {
+    global $permissionAuxiliar;
+    $permissionAuxiliar = find($colunas, $table, $complemento,  $where);
+}
+
 function delete($id = null) {
   global $customer;
   $customer = remove('customers', $id);

@@ -48,17 +48,9 @@
     close_database($database);
     return $found;
     }
-    function save($table = null, $data = null) {
+    function save($table = null, $colunas = null, $values = null) {
         $database = open_database();
-        $columns = null;
-        $values = null;
-        foreach ($data as $key => $value) {
-            $columns .= trim($key, "'") . ",";
-            $values .= "'$value',";
-        }
-        $columns = rtrim($columns, ',');
-        $values = rtrim($values, ',');
-        $sql = "INSERT INTO " . $table . "($columns)" . " VALUES " . "($values);";
+        $sql = "INSERT INTO $table ($colunas) VALUES ($values)";
         try {
             $database->query($sql);
             $_SESSION['message'] = 'Registro cadastrado com sucesso.';

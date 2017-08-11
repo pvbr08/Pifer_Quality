@@ -1,7 +1,6 @@
 <?php
     require_once('function.php');
-    $complement = ' LEFT JOIN PESSOAS ON (USUARIOS.FK_PESSOA = PESSOAS.ID) LEFT JOIN PERMISSAO ON (USUARIOS.FK_PERMISSAO = PERMISSAO.ID);';
-    index('USUARIOS.ID AS ID, USUARIOS.LOGIN AS LOGIN, USUARIOS.DT_LAST_ACCESS AS DT_LAST_ACCESS, USUARIOS.ATIVO AS ATIVO, PERMISSAO.DESCRICAO AS DESCRICAO ', " USUARIOS ", $complement);
+    index('ID, DESCRICAO, ATIVO, DT_CADASTRO', " PERMISSAO ", '');
 ?>
 
 <?php include(HEADER_TEMPLATE); ?>
@@ -31,26 +30,24 @@
         <thead>
             <tr>
 		<th>ID</th>
-		<th width="auto">Login</th>
-		<th>Último Acesso</th>
-		<th>Permissão</th>
+		<th width="auto">Permissão</th>
+		<th>Cadastro</th>
 		<th>Ativo</th>
                 <th>Opções</th>
             </tr>
         </thead>
         <tbody>
-            <?php if ($customers) : ?>
-                <?php foreach ($customers as $customer) : ?>
-                <tr class="<?php if($customer['ATIVO']){echo "success";}else{ echo "danger";} ?>">
-                        <td><?php echo $customer['ID']; ?></td>
-                        <td><?php echo $customer['LOGIN']; ?></td>
-                        <td><?php echo $customer['DT_LAST_ACCESS']; ?></td>
-                        <td><?php echo $customer['DESCRICAO']; ?></td>
-                        <td><?php if ($customer['ATIVO']){echo '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>';}else{echo '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>';} ?></td>
+            <?php if ($permission) : ?>
+                <?php foreach ($permission as $permissao) : ?>
+                <tr class="<?php if($permissao['ATIVO']){echo "success";}else{ echo "danger";} ?>">
+                        <td><?php echo $permissao['ID']; ?></td>
+                        <td><?php echo $permissao['DESCRICAO']; ?></td>
+                        <td><?php echo $permissao['DT_CADASTRO']; ?></td>
+                        <td><?php if ($permissao['ATIVO']){echo '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>';}else{echo '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>';} ?></td>
                         <td class="actions text-right">
-                            <a href="view.php?id=<?php echo $customer['ID']; ?>" class="btn btn-md btn-default"><i class="fa fa-eye"></i> </a>
-                            <a href="edit.php?id=<?php echo $customer['ID']; ?>" class="btn btn-md btn-default"><i class="fa fa-pencil"></i> </a>
-                            <a href="#" class="btn btn-md btn-default" data-toggle="modal" data-target="#delete-modal" data-customer="<?php echo $customer['id']; ?>">
+                            <a href="view.php?id=<?php echo $permissao['ID']; ?>" class="btn btn-md btn-default"><i class="fa fa-eye"></i> </a>
+                            <a href="edit.php?id=<?php echo $permissao['ID']; ?>" class="btn btn-md btn-default"><i class="fa fa-pencil"></i> </a>
+                            <a href="#" class="btn btn-md btn-default" data-toggle="modal" data-target="#delete-modal" data-customer="<?php echo $permissao['id']; ?>">
                                 <i class="fa fa-trash"></i> 
                             </a>
                         </td>
