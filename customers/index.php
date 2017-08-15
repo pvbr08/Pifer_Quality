@@ -39,18 +39,18 @@
             </tr>
         </thead>
         <tbody>
-            <?php if ($customers) : ?>
-                <?php foreach ($customers as $customer) : ?>
-                <tr class="<?php if($customer['ATIVO']){echo "success";}else{ echo "danger";} ?>">
-                        <td><?php echo $customer['ID']; ?></td>
-                        <td><?php echo $customer['LOGIN']; ?></td>
-                        <td><?php echo $customer['DT_LAST_ACCESS']; ?></td>
-                        <td><?php echo $customer['DESCRICAO']; ?></td>
-                        <td><?php if ($customer['ATIVO']){echo '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>';}else{echo '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>';} ?></td>
+            <?php if ($usuarios) : ?>
+                <?php foreach ($usuarios as $users) : ?>
+                <tr class="<?php if($users['ATIVO']){echo "success";}else{ echo "danger";} ?>">
+                        <td><?php echo $users['ID']; ?></td>
+                        <td><?php echo $users['LOGIN']; ?></td>
+                        <td><?php echo $users['DT_LAST_ACCESS']; ?></td>
+                        <td><?php echo $users['DESCRICAO']; ?></td>
+                        <td><?php if ($users['ATIVO']){echo '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>';}else{echo '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>';} ?></td>
                         <td class="actions text-right">
-                            <a href="view.php?id=<?php echo $customer['ID']; ?>" class="btn btn-md btn-default"><i class="fa fa-eye"></i> </a>
-                            <a href="edit.php?id=<?php echo $customer['ID']; ?>" class="btn btn-md btn-default"><i class="fa fa-pencil"></i> </a>
-                            <a href="#" class="btn btn-md btn-default" data-toggle="modal" data-target="#delete-modal" data-customer="<?php echo $customer['id']; ?>">
+                            <a href="view.php?id=<?php echo $users['ID']; ?>" class="btn btn-md btn-default"><i class="fa fa-eye"></i> </a>
+                            <a href="edit.php?id=<?php echo $users['ID']; ?>" class="btn btn-md btn-default"><i class="fa fa-pencil"></i> </a>
+                            <a href="#" class="btn btn-md btn-default" data-toggle="modal" data-target="#delete-modal" data-customer="<?php echo $users['id']; ?>">
                                 <i class="fa fa-trash"></i> 
                             </a>
                         </td>

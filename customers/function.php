@@ -3,13 +3,13 @@
 require_once('../config.php');
 require_once(DBAPI);
 $customers = null;
-$customer = null;
+$users = null;
 /**
  *  Listagem de Clientes
  */
 function index($colunas, $table, $complemento, $where = null) {
-    global $customers;
-    $customers = find_all($colunas, $table, $complemento,  $where);
+    global $usuarios;
+    $usuarios = find_all($colunas, $table, $complemento,  $where);
 }
 function add($table = null, $colunas = null) {
     if (!empty($_POST['customer'])) {
@@ -24,17 +24,17 @@ function edit() {
     $now = date_create('now', new DateTimeZone('America/Sao_Paulo'));
     if (isset($_GET['id'])) {
         $id = $_GET['id'];
-        if (isset($_POST['customer'])) {
-            $customer = $_POST['customer'];
-            $customer['modified'] = $now->format("Y-m-d H:i:s");
-            update('usuarios', $id, $customer);
+        if (isset($_POST['users'])) {
+            $user = $_POST['users'];
+            update('usuarios', $id, $user);
             header('location: index.php');
         } else {
-            global $customer;
-            $customer = find('USUARIOS.ID AS ID, FK_PERMISSAO, FK_PESSOA, LOGIN, PASS, DT_LAST_ACCESS', 'USUARIOS', '' ,' WHERE ID = ' . $id);
+            global $users;
+            $users = find('USUARIOS.ID AS ID, FK_PERMISSAO, FK_PESSOA, LOGIN, PASS, DT_LAST_ACCESS', 'USUARIOS', '' ,' WHERE ID = ' . $id);
         } 
     } else {
         header('location: index.php');
+       
     }
 }
 function update($table = null, $id = 0, $data = null) {
@@ -47,7 +47,6 @@ function update($table = null, $id = 0, $data = null) {
     $sql  = "UPDATE " . $table;
     $sql .= " SET $items";
     $sql .= " WHERE id=" . $id . ";";
-    
     try {
         $database->query($sql);
         $_SESSION['message'] = 'Registro atualizado com sucesso.';
@@ -59,12 +58,12 @@ function update($table = null, $id = 0, $data = null) {
     close_database($database);
 }
 function view($colunas, $table, $complemento = null,  $where) {
-    global $customer;
-    $customer = find($colunas, $table, $complemento,  $where);
+    global $users;
+    $users = find($colunas, $table, $complemento,  $where);
 }
 function delete($id = null) {
-  global $customer;
-  $customer = remove('customers', $id);
+  global $users;
+  $users = remove('customers', $id);
   header('location: index.php');
 }
 function remove( $table = null, $id = null ) {
