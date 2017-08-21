@@ -16,7 +16,7 @@
             </div>
 
             <div class="form-group col-md-3">
-                <label for="campo2">CNPJ / CPF</label>
+                <label for="campo2">Senha</label>
                 <input type="text" class="form-control" name="users['PASS']" value="<?php echo $users['PASS']; ?>">
             </div>
         </div>

@@ -12,12 +12,16 @@ function index($colunas, $table, $complemento, $where = null) {
     $usuarios = find_all($colunas, $table, $complemento,  $where);
 }
 function add($table = null, $colunas = null) {
-    if (!empty($_POST['customer'])) {
+    if (!empty($_POST['usuarios'])) {
         $today = date_create('now', new DateTimeZone('America/Sao_Paulo'));
-        $values = $_POST['FK_PESSOA'] . ", " . $_POST['FK_PERMISSAO'] . ", ";
+        $values = $_POST['FK_PESSOA'];
         $values .= $_POST['LOGIN'] . ", MD5('". $_POST['PASS'] . "'), 1, NOW()";
-        save($table, $colunas, $values);
-        header('location: index.php');
+        if ($_POST['PASS'] == $_POST['CONFIRM_PASS']){
+            save($table, $colunas, $values);
+            header('location: index.php');
+        }else{
+            echo "Inválido";
+        }
     }
 }
 function edit() {
@@ -30,7 +34,7 @@ function edit() {
             header('location: index.php');
         } else {
             global $users;
-            $users = find('USUARIOS.ID AS ID, FK_PERMISSAO, FK_PESSOA, LOGIN, PASS, DT_LAST_ACCESS', 'USUARIOS', '' ,' WHERE ID = ' . $id);
+            $users = find('USUARIOS.ID AS ID, FK_PESSOA, LOGIN, PASS, DT_LAST_ACCESS', 'USUARIOS', '' ,' WHERE ID = ' . $id);
         } 
     } else {
         header('location: index.php');

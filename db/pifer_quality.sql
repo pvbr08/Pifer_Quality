@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `pifer_quality` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `pifer_quality`;
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: pifer_quality
@@ -40,7 +42,7 @@ CREATE TABLE `avaliacao` (
 
 LOCK TABLES `avaliacao` WRITE;
 /*!40000 ALTER TABLE `avaliacao` DISABLE KEYS */;
-INSERT INTO `avaliacao` VALUES (1,0,'Não se aplica',NULL,1,'2017-08-10 10:31:51'),(2,1,'Péssimo',NULL,1,'2017-08-10 10:31:52'),(3,2,'Ruim',NULL,1,'2017-08-10 10:31:52'),(4,3,'Regular',NULL,1,'2017-08-10 10:31:52'),(5,4,'Bom',NULL,1,'2017-08-10 10:31:52'),(6,5,'Ótimo',NULL,1,'2017-08-10 10:31:52'),(7,6,'Perfeito',NULL,1,'2017-08-10 10:31:52');
+INSERT INTO `avaliacao` VALUES (1,0,'Não se aplica',NULL,1,'2017-08-21 11:16:03'),(2,1,'Péssimo',NULL,1,'2017-08-21 11:16:03'),(3,2,'Ruim',NULL,1,'2017-08-21 11:16:03'),(4,3,'Regular',NULL,1,'2017-08-21 11:16:03'),(5,4,'Bom',NULL,1,'2017-08-21 11:16:03'),(6,5,'Ótimo',NULL,1,'2017-08-21 11:16:03'),(7,6,'Perfeito',NULL,1,'2017-08-21 11:16:03');
 /*!40000 ALTER TABLE `avaliacao` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -69,11 +71,13 @@ DROP TABLE IF EXISTS `avaliacao_pergunta`;
 CREATE TABLE `avaliacao_pergunta` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `FK_PERGUNTA` int(11) NOT NULL,
-  `FK_AVALIACAO` int(11) NOT NULL,
+  `FK_AVALIACAO` int(11) DEFAULT NULL,
   `DT_CADASTRO` datetime NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `FK_PERGUNTA` (`FK_PERGUNTA`),
-  CONSTRAINT `avaliacao_pergunta_ibfk_1` FOREIGN KEY (`FK_PERGUNTA`) REFERENCES `pergunta` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `FK_AVALIACAO` (`FK_AVALIACAO`),
+  CONSTRAINT `avaliacao_pergunta_ibfk_1` FOREIGN KEY (`FK_PERGUNTA`) REFERENCES `pergunta` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `avaliacao_pergunta_ibfk_2` FOREIGN KEY (`FK_AVALIACAO`) REFERENCES `avaliacao` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -94,7 +98,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER TRG_DT_CADASTRO_AVALIACA_PERGUNTA BEFORE INSERT ON AVALIACAO_PERGUNTA FOR EACH ROW SET NEW.DT_CADASTRO = NOW() */;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER TRG_DT_CADASTRO_AVALIACAO_PERGUNTA BEFORE INSERT ON AVALIACAO_PERGUNTA FOR EACH ROW SET NEW.DT_CADASTRO = NOW() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -110,15 +114,15 @@ DROP TABLE IF EXISTS `pergunta`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pergunta` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `FK_PERMISSAO` int(11) NOT NULL,
+  `FK_PESSOA` int(11) NOT NULL,
   `DESCRICAO` varchar(255) NOT NULL,
   `OBS` longtext,
   `ATIVO` tinyint(1) NOT NULL,
   `DT_CADASTRO` datetime NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `DESCRICAO` (`DESCRICAO`),
-  KEY `FK_PERMISSAO` (`FK_PERMISSAO`),
-  CONSTRAINT `pergunta_ibfk_1` FOREIGN KEY (`FK_PERMISSAO`) REFERENCES `permissao` (`ID`) ON UPDATE CASCADE
+  KEY `FK_PERSSOA` (`FK_PESSOA`),
+  CONSTRAINT `pergunta_ibfk_1` FOREIGN KEY (`FK_PESSOA`) REFERENCES `pessoas` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -169,7 +173,7 @@ CREATE TABLE `permissao` (
 
 LOCK TABLES `permissao` WRITE;
 /*!40000 ALTER TABLE `permissao` DISABLE KEYS */;
-INSERT INTO `permissao` VALUES (1,'Administrador',1,'2017-08-10 10:27:28'),(2,'Cliente',1,'2017-08-10 10:27:28'),(3,'Fornecedor',1,'2017-08-10 10:27:28'),(4,'Funcionário',1,'2017-08-10 10:27:28'),(5,'Público',1,'2017-08-10 10:27:28');
+INSERT INTO `permissao` VALUES (1,'Administrador',1,'2017-08-21 11:22:26'),(2,'Cliente',1,'2017-08-21 11:22:26'),(3,'Fornecedor',1,'2017-08-21 11:22:26'),(4,'Funcionário',1,'2017-08-21 11:22:26'),(5,'Público',1,'2017-08-21 11:22:26');
 /*!40000 ALTER TABLE `permissao` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -197,13 +201,16 @@ DROP TABLE IF EXISTS `pessoas`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pessoas` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `FK_PERMISSAO` int(11) NOT NULL,
   `NOME` varchar(255) NOT NULL,
-  `CNPJ_CPF` varchar(20) NOT NULL,
+  `CNPJ_CPF` varchar(20) DEFAULT NULL,
   `ATIVO` tinyint(1) NOT NULL,
   `DT_CADASTRO` datetime NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `NOME` (`NOME`),
-  UNIQUE KEY `CNPJ_CPF` (`CNPJ_CPF`)
+  UNIQUE KEY `CNPJ_CPF` (`CNPJ_CPF`),
+  KEY `FK_PERMISSAO` (`FK_PERMISSAO`),
+  CONSTRAINT `pessoas_ibfk_1` FOREIGN KEY (`FK_PERMISSAO`) REFERENCES `permissao` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -213,7 +220,7 @@ CREATE TABLE `pessoas` (
 
 LOCK TABLES `pessoas` WRITE;
 /*!40000 ALTER TABLE `pessoas` DISABLE KEYS */;
-INSERT INTO `pessoas` VALUES (1,'Administrador','04.658.766/0001-19',1,'2017-08-10 10:21:13');
+INSERT INTO `pessoas` VALUES (1,1,'Pifer Railway Interiors','04.568.766/0001-19',1,'2017-08-21 11:28:34');
 /*!40000 ALTER TABLE `pessoas` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -242,8 +249,7 @@ DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE `usuarios` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `FK_PESSOA` int(11) NOT NULL,
-  `FK_PERMISSAO` int(11) NOT NULL,
-  `LOGIN` varchar(50) NOT NULL,
+  `LOGIN` varchar(255) NOT NULL,
   `PASS` varchar(50) NOT NULL,
   `ATIVO` tinyint(1) NOT NULL,
   `DT_LAST_ACCESS` datetime NOT NULL,
@@ -251,9 +257,7 @@ CREATE TABLE `usuarios` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `LOGIN` (`LOGIN`),
   KEY `FK_PESSOA` (`FK_PESSOA`),
-  KEY `FK_PERMISSAO` (`FK_PERMISSAO`),
-  CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`FK_PESSOA`) REFERENCES `pessoas` (`ID`) ON UPDATE CASCADE,
-  CONSTRAINT `usuarios_ibfk_2` FOREIGN KEY (`FK_PERMISSAO`) REFERENCES `permissao` (`ID`) ON UPDATE CASCADE
+  CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`FK_PESSOA`) REFERENCES `pessoas` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -263,9 +267,24 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,1,1,'Admin','e10adc3949ba59abbe56e057f20f883e',1,'2017-08-10 12:02:04','0000-00-00 00:00:00');
+INSERT INTO `usuarios` VALUES (1,1,'root','e10adc3949ba59abbe56e057f20f883e',1,'2017-08-21 11:31:12','2017-08-21 11:31:12');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER TRG_DT_CADASTRO_USUARIOS BEFORE INSERT ON USUARIOS FOR EACH ROW SET NEW.DT_CADASTRO = NOW() */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Dumping events for database 'pifer_quality'
@@ -284,4 +303,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-08-10 12:04:38
+-- Dump completed on 2017-08-21 11:44:08
